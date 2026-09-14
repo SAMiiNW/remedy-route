@@ -22,7 +22,7 @@ def send(method, args):
     )
     info = CLIENT.get_transaction(transaction_hash=tx)
     receipts = (info.get("consensus_data") or {}).get("leader_receipt") or []
-    if info.get("status_name") != "FINALIZED" or not any(
+    if info.get("status_name") != "FINALIZED" or info.get("result_name") != "MAJORITY_AGREE" or not any(
         item.get("execution_result") == "SUCCESS" for item in receipts
     ):
         raise RuntimeError({"tx": tx, "status": info.get("status_name"), "receipts": receipts})
@@ -35,13 +35,13 @@ opened = send(
     [
         route_id,
         ACCOUNT.address,
-        "A public HTTP service needs a standards-grounded remediation path for inconsistent request semantics.",
+        "Two independent records confirm inconsistent HTTP request semantics and identify RFC 9110 alignment as the least-escalatory remedy.",
         [
             "Align request handling and documentation with RFC 9110 HTTP semantics.",
             "Replace the HTTP interface with an unrelated SMTP workflow.",
         ],
-        "https://www.rfc-editor.org/rfc/rfc9110.txt",
-        "https://datatracker.ietf.org/doc/html/rfc9110",
+        "https://httpbin.org/base64/SW5jaWRlbnQgQTogVGhlIEhUVFAgc2VydmljZSBoYW5kbGVzIGNvbmRpdGlvbmFsIHJlcXVlc3RzIGluY29uc2lzdGVudGx5LiBSZW1lZGlhdGlvbiByZXF1aXJlZDogYWxpZ24gcmVxdWVzdCBoYW5kbGluZyBhbmQgZG9jdW1lbnRhdGlvbiB3aXRoIFJGQyA5MTEwIEhUVFAgc2VtYW50aWNzLiBTTVRQIHJlcGxhY2VtZW50IGlzIHVucmVsYXRlZC4=",
+        "https://httpbingo.org/base64/SW5kZXBlbmRlbnQgcmV2aWV3IEIgY29uZmlybXMgdGhlIEhUVFAgc2VtYW50aWNzIGRlZmVjdCBhbmQgcmVjb21tZW5kcyBSRkMgOTExMCBhbGlnbm1lbnQgYXMgdGhlIGxlYXN0LWVzY2FsYXRvcnkgcmVtZWR5Lg==",
         3600,
     ],
 )

@@ -1,10 +1,16 @@
 {
   "network": "StudioNet",
-  "contractAddress": "0xA456Ea341F0B3935310917C8172C0Fde46b7D1bF",
-  "deploymentTransaction": "0xdf128fa43814d1f18945ead55cbf06984bd808040ba93b78180e7a41cb514b37",
-  "sourceCommit": "e17d3520093d7b3fe0065bf7ca78a16b2667d2fc",
-  "contractSha256": "640d91c79a357c04a102eadf6cb669b0b515e801989c4a39e2f99046bd2bf8a6",
+  "contractAddress": "0xEEA739B1061d98B47797F789f1C18D16672bdd94",
+  "deploymentTransaction": "0x57b2aea99ded3ac8835536e93b2edc717ff8c5736e8d15f7a7baedebee8dbbd8",
+  "sourceCommit": "d9393230078d3b0b674efdf017d355db33629140",
+  "contractSha256": "14f81999dc88762d6d7f9adc892e3e36271c5bf645dc8558199bc832444307e3",
   "deployer": "ACCOUNT_1 / SAMiiNW",
-  "receiptStatus": "ACCEPTED",
-  "liveSmokeTransaction": "0xaabcf455307a15ac1b8689ea80703027c8263668916c2ad905e0689fe64cf6e8"
+  "receiptStatus": "FINALIZED",
+  "execution": "SUCCESS",
+  "liveRouteId": "RR-1789399072",
+  "liveTransactions": {
+    "openRoute": "0xd94e4b275a4a68132e1582521c6384ea7d1e31e3a9cbcfcac127a8fb90d1fe9a",
+    "selectRemedy": "0x1bd14254cdfb5df7885a6851ed6ed171ed886a3f60870bfadfa682904602ff79"
+  },
+  "liveResult": "MAJORITY_AGREE / REMEDY_OPEN / 3600-second frozen window"
 }

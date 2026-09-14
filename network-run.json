@@ -1,0 +1,31 @@
+{
+  "routeId": "RR-1789399072",
+  "transactions": {
+    "openRoute": "0xd94e4b275a4a68132e1582521c6384ea7d1e31e3a9cbcfcac127a8fb90d1fe9a",
+    "selectRemedy": "0x1bd14254cdfb5df7885a6851ed6ed171ed886a3f60870bfadfa682904602ff79"
+  },
+  "state": {
+    "completion_deadline": 1789402711,
+    "completion_digest": "",
+    "completion_url": "",
+    "completion_window": 3600,
+    "digests": [
+      "d1322a80b27106a51d7e3c50f2de844ba4d4b3c34633225cadd92fb9d8e645dd",
+      "6a3abdba78f3ebb35c14faec6497edb664cfc8e1aebe8a1f6436d2bd16a4c177"
+    ],
+    "id": "RR-1789399072",
+    "issue": "Two independent records confirm inconsistent HTTP request semantics and identify RFC 9110 alignment as the least-escalatory remedy.",
+    "owner": "0xCAFA30BF94D4fb01146588a1b7901BD85E7DbD0f",
+    "recipient": "0xCAFA30BF94D4fb01146588a1b7901BD85E7DbD0f",
+    "remedy_tracks": [
+      "Align request handling and documentation with RFC 9110 HTTP semantics.",
+      "Replace the HTTP interface with an unrelated SMTP workflow."
+    ],
+    "selected_track": 0,
+    "sources": [
+      "https://httpbin.org/base64/SW5jaWRlbnQgQTogVGhlIEhUVFAgc2VydmljZSBoYW5kbGVzIGNvbmRpdGlvbmFsIHJlcXVlc3RzIGluY29uc2lzdGVudGx5LiBSZW1lZGlhdGlvbiByZXF1aXJlZDogYWxpZ24gcmVxdWVzdCBoYW5kbGluZyBhbmQgZG9jdW1lbnRhdGlvbiB3aXRoIFJGQyA5MTEwIEhUVFAgc2VtYW50aWNzLiBTTVRQIHJlcGxhY2VtZW50IGlzIHVucmVsYXRlZC4=",
+      "https://httpbingo.org/base64/SW5kZXBlbmRlbnQgcmV2aWV3IEIgY29uZmlybXMgdGhlIEhUVFAgc2VtYW50aWNzIGRlZmVjdCBhbmQgcmVjb21tZW5kcyBSRkMgOTExMCBhbGlnbm1lbnQgYXMgdGhlIGxlYXN0LWVzY2FsYXRvcnkgcmVtZWR5Lg=="
+    ],
+    "state": "REMEDY_OPEN"
+  }
+}

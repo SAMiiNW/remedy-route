@@ -16,4 +16,6 @@ Only the assigned recipient can call `submit_completion`, and its completion URL
 
 The contract rejects duplicate routes, same-host source pairs, invalid transitions, unauthorized completion, and replay. `get_route(id)` returns the precise selected track, evidence attribution, state, and final completion decision.
 
-StudioNet: [`0xA456Ea341F0B3935310917C8172C0Fde46b7D1bF`](https://explorer-studio.genlayer.com/address/0xA456Ea341F0B3935310917C8172C0Fde46b7D1bF)
+StudioNet: [`0xEEA739B1061d98B47797F789f1C18D16672bdd94`](https://explorer-studio.genlayer.com/address/0xEEA739B1061d98B47797F789f1C18D16672bdd94)
+
+Verified live route `RR-1789399072` reached `REMEDY_OPEN` with validator majority agreement. Its stored completion window is 3,600 seconds and its deadline was derived only after remedy selection. See `deployment.json` and `network-run.json` for finalized transaction hashes and canonical readback.
