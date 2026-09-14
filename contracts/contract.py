@@ -25,7 +25,7 @@ def parse(v):
 @allow_storage
 @dataclass
 class Route:
- owner:Address;recipient:Address;issue:str;tracks:str;sources:str;state:str;selected_track:u256;digests:str;completion_url:str;completion_digest:str;completion_deadline:u256
+ owner:Address;recipient:Address;issue:str;tracks:str;sources:str;state:str;selected_track:u256;digests:str;completion_url:str;completion_digest:str;completion_window:u256;completion_deadline:u256
 class RemedyRoute(gl.Contract):
  routes:TreeMap[str,Route];ids:DynArray[str]
  def __init__(self):pass
@@ -66,29 +66,29 @@ class RemedyRoute(gl.Contract):
    return mine['completed']==theirs.get('completed') and mine['digest']==theirs.get('digest')
   return gl.vm.run_nondet_unsafe(run,valid)
  @gl.public.write
- def open_route(self,i:str,recipient:str,issue:str,remedy_tracks:list[str],source_a:str,source_b:str)->None:
-  q=key(i);text=clean(issue,1000);tracks=[clean(x,300) for x in remedy_tracks[:5] if clean(x,300)];a=url(source_a);b=url(source_b)
-  if q in self.routes or len(text)<30 or len(tracks)<2 or len(set(tracks))!=len(tracks) or a[0]==b[0]:raise gl.vm.UserError('[EXPECTED] complete independent remedy route required')
+ def open_route(self,i:str,recipient:str,issue:str,remedy_tracks:list[str],source_a:str,source_b:str,completion_seconds:u256)->None:
+  q=key(i);text=clean(issue,1000);tracks=[clean(x,300) for x in remedy_tracks[:5] if clean(x,300)];a=url(source_a);b=url(source_b);window=int(completion_seconds)
+  if q in self.routes or len(text)<30 or len(tracks)<2 or len(set(tracks))!=len(tracks) or a[0]==b[0] or window<3600 or window>2592000:raise gl.vm.UserError('[EXPECTED] complete independent remedy route required')
   try:party=Address(recipient)
   except:raise gl.vm.UserError('[EXPECTED] valid recipient required')
-  self.routes[q]=Route(gl.message.sender_address,party,text,json.dumps(tracks),json.dumps([a[1],b[1]]),'OPEN',u256(0),'[]','','',0);self.ids.append(q)
+  self.routes[q]=Route(gl.message.sender_address,party,text,json.dumps(tracks),json.dumps([a[1],b[1]]),'OPEN',u256(0),'[]','','',u256(window),u256(0));self.ids.append(q)
  @gl.public.write
- def select_remedy(self,i:str,completion_seconds:u256)->None:
-  _,r=self._get(i)
-  if r.state!='OPEN' or int(completion_seconds)<60:raise gl.vm.UserError('[EXPECTED] open remedy route required')
+ def select_remedy(self,i:str)->None:
+  q,r=self._get(i)
+  if r.state!='OPEN':raise gl.vm.UserError('[EXPECTED] open remedy route required')
   out=self._decide(r);r.digests=json.dumps(out['digests'])
-  if out['selected_track']<0:r.state='UNRESOLVED';return
-  r.selected_track=u256(out['selected_track']);r.completion_deadline=now()+int(completion_seconds);r.state='REMEDY_OPEN'
+  if out['selected_track']<0:r.state='UNRESOLVED';self.routes[q]=r;return
+  r.selected_track=u256(out['selected_track']);r.completion_deadline=u256(now()+int(r.completion_window));r.state='REMEDY_OPEN';self.routes[q]=r
  @gl.public.write
  def submit_completion(self,i:str,completion_url:str)->None:
-  _,r=self._get(i);host,link=url(completion_url)
+  q,r=self._get(i);host,link=url(completion_url)
   if r.state!='REMEDY_OPEN' or gl.message.sender_address!=r.recipient or now()>int(r.completion_deadline) or host in [url(x)[0] for x in json.loads(r.sources)]:raise gl.vm.UserError('[EXPECTED] active independent completion required')
-  out=self._verify_completion(r,link);r.completion_url=link;r.completion_digest=out['digest'];r.state='COMPLETED' if out['completed'] else 'DISPUTED'
+  out=self._verify_completion(r,link);r.completion_url=link;r.completion_digest=out['digest'];r.state='COMPLETED' if out['completed'] else 'DISPUTED';self.routes[q]=r
  @gl.public.write
  def expire_route(self,i:str)->None:
-  _,r=self._get(i)
+  q,r=self._get(i)
   if r.state!='REMEDY_OPEN' or now()<=int(r.completion_deadline):raise gl.vm.UserError('[EXPECTED] expired remedy route required')
-  r.state='EXPIRED'
+  r.state='EXPIRED';self.routes[q]=r
  @gl.public.view
  def get_route(self,i:str)->dict:
-  q,r=self._get(i);return {'id':q,'owner':r.owner.as_hex,'recipient':r.recipient.as_hex,'issue':r.issue,'remedy_tracks':json.loads(r.tracks),'sources':json.loads(r.sources),'state':r.state,'selected_track':int(r.selected_track) if r.state not in ('OPEN','UNRESOLVED') else -1,'digests':json.loads(r.digests),'completion_url':r.completion_url,'completion_digest':r.completion_digest,'completion_deadline':int(r.completion_deadline)}
+  q,r=self._get(i);return {'id':q,'owner':r.owner.as_hex,'recipient':r.recipient.as_hex,'issue':r.issue,'remedy_tracks':json.loads(r.tracks),'sources':json.loads(r.sources),'state':r.state,'selected_track':int(r.selected_track) if r.state not in ('OPEN','UNRESOLVED') else -1,'digests':json.loads(r.digests),'completion_url':r.completion_url,'completion_digest':r.completion_digest,'completion_window':int(r.completion_window),'completion_deadline':int(r.completion_deadline)}

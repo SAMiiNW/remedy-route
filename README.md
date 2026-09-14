@@ -8,7 +8,7 @@ Lifecycle: `OPEN -> REMEDY_OPEN -> COMPLETED | DISPUTED | EXPIRED`; insufficient
 
 ## Case progression
 
-`open_route` records the issue, its permitted remedy tracks, a named recipient, and two distinct source records. `select_remedy` makes validators retrieve the records and choose the supported least-escalatory track. The result is not a private recommendation: the selected track and source digests are stored for later inspection.
+`open_route` records the issue, its permitted remedy tracks, a named recipient, two distinct source records, and a completion window between one hour and 30 days. That duration is frozen at creation. `select_remedy` accepts no caller-supplied deadline and makes validators retrieve the records and choose the supported least-escalatory track. Once a remedy is selected, the deadline is derived from the frozen duration. The result is not a private recommendation: the selected track and source digests are stored for later inspection.
 
 Only the assigned recipient can call `submit_completion`, and its completion URL must use a host separate from the original evidence. If the evidence is insufficient the route becomes `UNRESOLVED`; if the recipient does not complete in time it can become `EXPIRED`; a conflicting completion is `DISPUTED` rather than silently accepted.
 
